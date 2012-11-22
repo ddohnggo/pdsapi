@@ -119,6 +119,7 @@ INSTALLED_APPS = (
     # 'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
+    'insta',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -151,4 +152,4 @@ LOGGING = {
 }
 
 import dj_database_url
-DATABASES['default'] = dj_database_url.config()
+DATABASES = {'default': dj_database_url.config(default='postgres://zcrbpceraufgxq:ENm9wzMoiiLiK1pUkdiyYLh8v7@ec2-23-21-209-58.compute-1.amazonaws.com:5432/d4muvsr795jmqp')}
