@@ -1,0 +1,19 @@
+{% extends "insta/base.html" %}
+
+{% block content %} 
+    <p> average comments: {{ comments }} </p>
+    <p> average likes: {{ likes }} </p>
+
+{% if urls %}
+    <ul>
+    {% for i in urls %}
+        <li> <img src="{{ i }}" /> </li>
+    {% endfor  %}
+    </ul>
+{% else %}
+    <p> no filters are available </p>
+
+{% endif %}
+
+
+{% endblock %}
