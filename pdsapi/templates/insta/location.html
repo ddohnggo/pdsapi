@@ -1,0 +1,35 @@
+{% extends "insta/base.html" %} 
+
+{% block content %}
+   <!--
+    <p> {{ latitude }} </p>
+    <p> {{ longitude }} </p>
+   --> 
+
+{% if all %}
+  <ul> 
+  {% for k, i in all.items %}     
+      <h1> {{ k }} </h1>
+   
+      {% if i.items %}
+
+      {% for x, y in i.items%}
+
+          {% for z in y %}
+
+          <li> <img src="{{ z }}" /> </li>
+
+	  {% endfor %}
+
+      {% endfor %}
+
+      {% endif %}
+  {% endfor %}
+  </ul>
+{% else %}
+  <p> no photos available </p>
+
+{% endif %}
+
+
+{% endblock %}

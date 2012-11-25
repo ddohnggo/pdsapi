@@ -7,6 +7,7 @@ from django.conf.urls import patterns, include, url
 urlpatterns = patterns('',
     # Examples:
     url(r'^$', 'insta.views.home', name='home'),
+    url(r'^location/$', 'insta.views.location', name='location'),
     # url(r'^pdsapi/', include('pdsapi.foo.urls')),
 
     # Uncomment the admin/doc line below to enable admin documentation:
