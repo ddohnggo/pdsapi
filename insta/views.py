@@ -135,18 +135,28 @@ def location(request):
 		    # create multi-dimensional dict
 		    if all.has_key(loc_name):
 		        all[loc_name]["image"].append(y["images"]["standard_resolution"]["url"])
+			all[loc_name]["filter"].append(y["filter"])
+			if y["caption"] != None:
+			    all[loc_name]["caption"].append(y["caption"]["text"])
+			if y["tags"]:
+			    # list comprehension
+			    all[loc_name]["tags"] = [a for a in y["tags"]]
+			
 			#print loc_name
 			#print y["images"]["standard_resolution"]["url"]
 	            else:
 		        all[loc_name] = {}
 		        all[loc_name]["image"] = []
+			all[loc_name]["tags"] = []
+			all[loc_name]["filter"] = []
+			all[loc_name]["caption"] = []
 
             else:
 	        continue
     
     # set dictionary
     all = dict(all)
- 
+    print all 
     print lat, long
 
     return render_to_response('insta/location.html', {'all': all})
