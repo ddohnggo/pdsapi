@@ -102,7 +102,10 @@ def location(request):
 	    lat = float(loc[1])
 	elif loc[0] == 'Longitude':
 	    long = float(loc[1])
-
+    
+    # test
+    #lat = 40.742974
+    #long = -73.994468 
     insta_loc = insta_api('locations', lat, long)
 
     # create a list of place ids
@@ -124,8 +127,8 @@ def location(request):
 		    # create multi-dimensional dict
 		    if all.has_key(loc_name):
 		        all[loc_name]["image"].append(y["images"]["standard_resolution"]["url"])
-			print loc_name
-			print y["images"]["standard_resolution"]["url"]
+			#print loc_name
+			#print y["images"]["standard_resolution"]["url"]
 	            else:
 		        all[loc_name] = {}
 		        all[loc_name]["image"] = []
