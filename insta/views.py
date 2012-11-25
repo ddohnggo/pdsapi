@@ -100,9 +100,15 @@ def location(request):
         for i in data:
             loc = i.strip('\n').split(':')
 	    if loc[0] == 'Latitude':
-	        lat = float(loc[1])
+	        if loc[1] == ' ':
+		    lat = 40.728977
+		else:
+	            lat = float(loc[1])
 	    elif loc[0] == 'Longitude':
-	        long = float(loc[1])
+	        if loc[1] == ' ':
+                    long = -73.996288
+		else: 
+	            long = float(loc[1])
     else:
         # default is nyu
         lat = 40.728977
