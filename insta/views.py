@@ -96,16 +96,18 @@ def location(request):
     data = loc_api(ip)
    
     # loop through location data
-    for i in data:
-        loc = i.strip('\n').split(':')
-	if loc[0] == 'Latitude':
-	    lat = float(loc[1])
-	elif loc[0] == 'Longitude':
-	    long = float(loc[1])
+    if data:
+        for i in data:
+            loc = i.strip('\n').split(':')
+	    if loc[0] == 'Latitude':
+	        lat = float(loc[1])
+	    elif loc[0] == 'Longitude':
+	        long = float(loc[1])
+    else:
+        # default is nyu
+        lat = 40.728977
+        long = -73.996288 
     
-    # test
-    #lat = 40.742974
-    #long = -73.994468 
     insta_loc = insta_api('locations', lat, long)
 
     # create a list of place ids
