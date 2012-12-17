@@ -155,6 +155,10 @@ def location(request):
 			if y["tags"]:
 			    # list comprehension
 			    all[loc_name]["tags"] = [a for a in y["tags"]]
+                        if y["comments"]["count"]:
+                            all[loc_name]["comment_cnt"].append(y["comments"]["count"])
+                        if y["likes"]["count"]:
+                            all[loc_name]["likes_cnt"].append(y["likes"]["count"])
                         for z in y["comments"]["data"]:
                             words = z["text"].split(' ')
                             for word in words:
@@ -167,9 +171,7 @@ def location(request):
                                     all[loc_name]["comments"][word.lower()] += 1
                                 else:
                                     all[loc_name]["comments"][word.lower()] = 1
-			
-			#print loc_name
-			#print y["images"]["standard_resolution"]["url"]
+		    # initialize dictionary	
 	            else:
 		        all[loc_name] = {}
 		        all[loc_name]["image"] = []
@@ -177,14 +179,26 @@ def location(request):
 			all[loc_name]["filter"] = []
 			all[loc_name]["caption"] = []
                         all[loc_name]["comments"] = {}
+                        all[loc_name]["likes_cnt"] = []
+                        all[loc_name]["comment_cnt"] = []
             else:
 	        continue
     
+    # calculate averages
+    for x in all:
+        if all[x]["likes_cnt"]:
+            all[x]["likes_avg"] = sum(all[x]["likes_cnt"])/len(all[x]["likes_cnt"])            
+            print all[x]["likes_avg"]
+        if all[x]["comment_cnt"]:
+            all[x]["comment_avg"] = sum(all[x]["comment_cnt"])/len(all[x]["comment_cnt"])
+            print all[x]["comment_avg"]
+
+
     # set dictionary
     #all["comments"] = comment_dict
     all = dict(all)
     #print comment_dict
-    print all 
+    #print all 
     #print lat, long
 
     return render_to_response('insta/location.html', {'all': all})

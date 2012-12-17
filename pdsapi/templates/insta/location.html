@@ -13,6 +13,12 @@
   {% for k, i in all.items %}     
       {% if i.filter %}
           <h1> Place: {{ k }} </h1>
+
+          {% if i.likes_avg and i.comment_avg %} 
+              <h2> <p> <u> Averages by Location </u> </p> </h2>
+                   <p> Average Comments: {{ i.comment_avg }} </p>
+                   <p> Average Likes: {{ i.likes_avg }} </p>
+          {% endif %}
  
           {% if i.comments%}
  
