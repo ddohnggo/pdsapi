@@ -12,6 +12,7 @@ def home(request):
 
     image_list = []
     comment_list = []
+    comments_dict = {}
     likes_list = []
     filter_list = []
     filter_count = Counter()
@@ -20,7 +21,16 @@ def home(request):
     tags_list = []
     dict_avg = {}
     for i in data:
+        # count the number of words in the comments
         for x in json.loads(i)["data"]:
+            for y in x["comments"]["data"]:
+                words = y["text"].split(' ')         
+                for word in words:
+                    if word in comments_dict:
+                        comments_dict[word.lower()] += 1     
+                    else:
+                        comments_dict[word.lower()] = 1               
+
             comment_list.append( x["comments"]["count"])
 	    likes_list.append(x["likes"]["count"])
 	    filter_list.append( x["filter"])
@@ -30,6 +40,7 @@ def home(request):
 	    #caption_list.append(x["caption"]["text"])
 	    tags_list.append(x["tags"])
 
+    print comments_dict
     #print images
     print comment_list
     print filter_list
@@ -47,6 +58,7 @@ def home(request):
     dict_avg['comments'] = avg_comments
     dict_avg['likes'] = avg_likes
     dict_avg['urls'] = image_list
+    dict_avg['comment_dict'] = comments_dict
     print dict_avg
 
     return render_to_response('insta/index.html', dict_avg)
@@ -126,11 +138,20 @@ def location(request):
 
     # loop through location photo urls
     all = {}
+    comment_dict = {}
     for i in photo_data:
         place_photos = urllib2.urlopen(i)
 	for x in place_photos:
 	    if json.loads(x)["data"]:
+                # count words
 	        for y in json.loads(x)["data"]:
+                    for z in y["comments"]["data"]:
+                        words = z["text"].split(' ')
+                        for word in words:
+                            if word in comment_dict:
+                                comment_dict[word.lower()] += 1
+                            else:
+                                comment_dict[word.lower()] = 1
 		    loc_name = y["location"]["name"]
 		    # create multi-dimensional dict
 		    if all.has_key(loc_name):
@@ -151,13 +172,16 @@ def location(request):
 			all[loc_name]["filter"] = []
 			all[loc_name]["caption"] = []
 
+
             else:
 	        continue
     
     # set dictionary
+    #all["comments"] = comment_dict
     all = dict(all)
+    #print comment_dict
     print all 
-    print lat, long
+    #print lat, long
 
     return render_to_response('insta/location.html', {'all': all})
 
