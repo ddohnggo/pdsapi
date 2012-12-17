@@ -11,19 +11,29 @@
 {% if all %}
   <ul> 
   {% for k, i in all.items %}     
-      <h1> {{ k }} </h1>
-   
-      {% if i.items %}
+      {% if i.filter %}
+          <h1> Place: {{ k }} </h1>
+ 
+          {% if i.comments%}
+ 
+              <h2> <p> <u> Word Cloud </u> </p> </h2>
 
-      {% for x, y in i.items%}
+              {% for x, y in i.comments.items %}
+                  <font style="font-size: {{ y }}em;"> {{ x }} </font>
+              {% endfor %}
 
-          {% for z in y %}
+          {% else %}
+ 
+              <h2> <p> <u> No Comments Left on Photos </u> </p> </h2>
+    
+          {% endif %}
 
-          <li> <img src="{{ z }}" /> </li>
+          {% for z in i.image %}
 
-	  {% endfor %}
+              <li> <img src="{{ z }}" /> </li>
 
-      {% endfor %}
+          {% endfor %}
+
 
       {% endif %}
   {% endfor %}

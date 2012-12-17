@@ -145,13 +145,6 @@ def location(request):
 	    if json.loads(x)["data"]:
                 # count words
 	        for y in json.loads(x)["data"]:
-                    for z in y["comments"]["data"]:
-                        words = z["text"].split(' ')
-                        for word in words:
-                            if word in comment_dict:
-                                comment_dict[word.lower()] += 1
-                            else:
-                                comment_dict[word.lower()] = 1
 		    loc_name = y["location"]["name"]
 		    # create multi-dimensional dict
 		    if all.has_key(loc_name):
@@ -162,6 +155,18 @@ def location(request):
 			if y["tags"]:
 			    # list comprehension
 			    all[loc_name]["tags"] = [a for a in y["tags"]]
+                        for z in y["comments"]["data"]:
+                            words = z["text"].split(' ')
+                            for word in words:
+                                if word in comment_dict:
+                                    comment_dict[word.lower()] += 1
+                                else:
+                                    comment_dict[word.lower()] = 1
+
+                                if word in all[loc_name]["comments"]:
+                                    all[loc_name]["comments"][word.lower()] += 1
+                                else:
+                                    all[loc_name]["comments"][word.lower()] = 1
 			
 			#print loc_name
 			#print y["images"]["standard_resolution"]["url"]
@@ -171,8 +176,7 @@ def location(request):
 			all[loc_name]["tags"] = []
 			all[loc_name]["filter"] = []
 			all[loc_name]["caption"] = []
-
-
+                        all[loc_name]["comments"] = {}
             else:
 	        continue
     
