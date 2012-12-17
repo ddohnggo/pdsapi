@@ -1,14 +1,42 @@
 {% extends "insta/base.html" %}
 
+<!--
+<script type="text/javascript">
+   setInterval("my_function();", 10000);
+    
+       function my_function() {
+           window.location = location.href;
+       }   
+
+</script>
+-->
+
+<script>
+if (window.top==window) {
+    window.setTimeout('location.reload()', 3000);
+} 
+
+</script>
+
 {% block content %} 
+    <p> <a href="/location"> Location </a> </p>
+   
+    <h1> <p> <u> Instagram Popular Photo Averages </u> </p> </h1>
     <p> average comments: {{ comments }} </p>
     <p> average likes: {{ likes }} </p>
+
+<h1> <p> <u> Word Cloud </u> </p> </h1>
+{% if comment_dict%}
+    {% for x, y in comment_dict.items %} 
+       <font style="font-size: {{ y }}em;">{{ x }} </font>
+    {% endfor %}       
+{% endif %}
 
 {% if urls %}
     <ul>
     {% for i in urls %}
         <li> <img src="{{ i }}" /> </li>
-    {% endfor  %}
+    {% endfor %}
     </ul>
 {% else %}
     <p> no filters are available </p>
