@@ -9,7 +9,8 @@ from collections import Counter, defaultdict
 
 def home(request):
     data = insta_api('media', 'popular')
-
+    
+    # variables
     image_list = []
     comment_list = []
     comments_dict = {}
@@ -20,9 +21,11 @@ def home(request):
     caption_list = []
     tags_list = []
     dict_avg = {}
+
     for i in data:
-        # count the number of words in the comments
+        # count the number of words in the comments and caption
         for x in json.loads(i)["data"]:
+            # comment count
             for y in x["comments"]["data"]:
                 words = y["text"].split(' ')         
                 for word in words:
@@ -30,7 +33,14 @@ def home(request):
                         comments_dict[word.lower()] += 1     
                     else:
                         comments_dict[word.lower()] = 1               
-
+            # caption count
+            if x["caption"] != None:
+                for y in x["caption"]["text"].split():
+                    if y in comments_dict:
+                        comments_dict[word.lower()] += 1
+                    else:
+                        comments_dict[word.lower()] = 1 
+            # build analysis
             comment_list.append( x["comments"]["count"])
 	    likes_list.append(x["likes"]["count"])
 	    filter_list.append( x["filter"])
@@ -40,17 +50,19 @@ def home(request):
 	    #caption_list.append(x["caption"]["text"])
 	    tags_list.append(x["tags"])
 
+    """
     print comments_dict
-    #print images
+    print images
     print comment_list
     print filter_list
     print filter_count
     print location_list
-    #print caption_list
+    print caption_list
     print tags_list
  
-    #print avg(float(x["comments"]["count"])}
- 
+    print avg(float(x["comments"]["count"])}
+    """
+
     # avg # of comments
     avg_comments = sum(comment_list)/float(len(comment_list))
     avg_likes = sum(likes_list)/float(len(likes_list))
@@ -59,10 +71,9 @@ def home(request):
     dict_avg['likes'] = avg_likes
     dict_avg['urls'] = image_list
     dict_avg['comment_dict'] = comments_dict
-    print dict_avg
+    #print dict_avg
 
     return render_to_response('insta/index.html', dict_avg)
-    #return HttpResponse("hello world")
 
 
 def insta_api(endpoint, *args):
@@ -159,6 +170,7 @@ def location(request):
                             all[loc_name]["comment_cnt"].append(y["comments"]["count"])
                         if y["likes"]["count"]:
                             all[loc_name]["likes_cnt"].append(y["likes"]["count"])
+                        # comments
                         for z in y["comments"]["data"]:
                             words = z["text"].split(' ')
                             for word in words:
@@ -171,6 +183,14 @@ def location(request):
                                     all[loc_name]["comments"][word.lower()] += 1
                                 else:
                                     all[loc_name]["comments"][word.lower()] = 1
+                        # caption
+                        if y["caption"] != None:
+                            for z in y["caption"]["text"].split():
+                                if z in all[loc_name]["comments"]:
+                                    all[loc_name]["comments"][z.lower()] += 1
+                                else:
+                                    all[loc_name]["comments"][z.lower()] = 1
+
 		    # initialize dictionary	
 	            else:
 		        all[loc_name] = {}
@@ -188,10 +208,10 @@ def location(request):
     for x in all:
         if all[x]["likes_cnt"]:
             all[x]["likes_avg"] = sum(all[x]["likes_cnt"])/len(all[x]["likes_cnt"])            
-            print all[x]["likes_avg"]
+            #print all[x]["likes_avg"]
         if all[x]["comment_cnt"]:
             all[x]["comment_avg"] = sum(all[x]["comment_cnt"])/len(all[x]["comment_cnt"])
-            print all[x]["comment_avg"]
+            #print all[x]["comment_avg"]
 
 
     # set dictionary
